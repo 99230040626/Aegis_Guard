@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Aegis Guard – Phishing Detection</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- ───────────────────────────── HEADER ───────────────────────────────── -->
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="logo">
+        <span class="logo-icon">🛡️</span>
+        <span class="logo-text">Aegis Guard</span>
+      </div>
+      <div class="header-status">
+        <span id="connection-dot" class="dot dot--disconnected"></span>
+        <span id="connection-label">Connecting…</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ─────────────────────── PHISHING ALERT BANNER ──────────────────────── -->
+  <div id="alert-banner" class="alert-banner alert-banner--hidden" role="alert" aria-live="assertive">
+    <span class="alert-icon">⚠️</span>
+    <span id="alert-message">Phishing URL detected!</span>
+    <button class="alert-close" id="alert-close-btn" aria-label="Dismiss alert">✕</button>
+  </div>
+
+  <!-- ──────────────────────────── MAIN CONTENT ───────────────────────────── -->
+  <main class="main-container">
+
+    <!-- Manual scan form -->
+    <section class="scan-section card">
+      <h2 class="section-title">Manual URL Scan</h2>
+      <form id="scan-form" autocomplete="off">
+        <div class="input-group">
+          <input
+            type="url"
+            id="url-input"
+            class="url-input"
+            placeholder="https://example.com"
+            required
+            aria-label="URL to scan"
+          />
+          <button type="submit" class="btn btn--primary" id="scan-btn">
+            <span class="btn-icon">🔍</span> Scan
+          </button>
+        </div>
+        <p id="form-error" class="form-error" aria-live="polite"></p>
+      </form>
+    </section>
+
+    <!-- Live scan result (most recent) -->
+    <section id="live-result-section" class="live-result card" hidden>
+      <h2 class="section-title">Latest Scan Result</h2>
+      <div class="result-card" id="live-result-card">
+        <div class="result-url" id="result-url"></div>
+        <div class="result-meta">
+          <span class="result-status badge" id="result-status"></span>
+          <span class="result-score" id="result-score"></span>
+          <span class="result-time" id="result-time"></span>
+        </div>
+        <div class="progress-container" aria-label="Risk score">
+          <div class="progress-bar" id="progress-bar"></div>
+        </div>
+        <div class="feature-row" id="feature-row"></div>
+      </div>
+    </section>
+
+    <!-- Stats bar -->
+    <section class="stats-bar card">
+      <div class="stat">
+        <span class="stat-value" id="stat-total">0</span>
+        <span class="stat-label">Total Scanned</span>
+      </div>
+      <div class="stat stat--safe">
+        <span class="stat-value" id="stat-safe">0</span>
+        <span class="stat-label">Safe</span>
+      </div>
+      <div class="stat stat--warning">
+        <span class="stat-value" id="stat-warning">0</span>
+        <span class="stat-label">Warning</span>
+      </div>
+      <div class="stat stat--malicious">
+        <span class="stat-value" id="stat-malicious">0</span>
+        <span class="stat-label">Malicious</span>
+      </div>
+    </section>
+
+    <!-- Scan history table -->
+    <section class="history-section card">
+      <div class="history-header">
+        <h2 class="section-title">Scan History</h2>
+        <button class="btn btn--secondary btn--sm" id="clear-log-btn">Clear</button>
+      </div>
+      <div class="table-wrapper">
+        <table class="history-table" id="history-table">
+          <thead>
+            <tr>
+              <th>Time</th>
+              <th>URL</th>
+              <th>Status</th>
+              <th>Risk Score</th>
+            </tr>
+          </thead>
+          <tbody id="history-tbody">
+            <tr class="empty-row">
+              <td colspan="4">No scans yet – waiting for results…</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ──────────────────────────── FOOTER ─────────────────────────────────── -->
+  <footer class="site-footer">
+    <p>Aegis Guard &copy; 2024 &mdash; AI-powered phishing detection running 24/7</p>
+  </footer>
+
+  <!-- Socket.IO client (served by the backend) -->
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
